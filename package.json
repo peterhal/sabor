@@ -6,7 +6,7 @@
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/peterhal/sabor"
+    "url": "https://github.com/peterhal/sabor.git"
   },
   "scripts": {
     "build": "babel src -d lib",
@@ -34,7 +34,21 @@
     "eslint-plugin-jasmine": "1.6.0"
   },
   "babel": {
-    "presets": ["es2015", "stage-0"],
-    "plugins": ["syntax-flow", "transform-flow-strip-types"]
-  }
+    "presets": [
+      "es2015",
+      "stage-0"
+    ],
+    "plugins": [
+      "syntax-flow",
+      "transform-flow-strip-types"
+    ]
+  },
+  "bugs": {
+    "url": "https://github.com/peterhal/sabor/issues"
+  },
+  "homepage": "https://github.com/peterhal/sabor#readme",
+  "keywords": [
+    "JavaScript"
+  ],
+  "author": "Peter Hallam <peter@peterhallam.com>"
 }
