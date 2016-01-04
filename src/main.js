@@ -16,8 +16,11 @@ function buildGraph(rootFiles: Array<string>): Map<string, Node> {
   const nodes: Map<string, Node> = new Map();
   const toProcess = [];
 
-  function ensureNode(file: string): Node {
+  function ensureNode(file: string, from: ?string): Node {
     if (!nodes.has(file)) {
+      if (verbose && from != null) {
+        process.stdout.write(`Adding file ${file} referenced from ${from}\n`);
+      }
       const result = {
         file,
         edges: new Map(),
@@ -32,7 +35,7 @@ function buildGraph(rootFiles: Array<string>): Map<string, Node> {
     }
   }
 
-  rootFiles.forEach(ensureNode);
+  rootFiles.forEach(file => ensureNode(file, null));
 
   while (toProcess.length > 0) {
     const fileName = toProcess.pop();
@@ -40,7 +43,7 @@ function buildGraph(rootFiles: Array<string>): Map<string, Node> {
     invariant(startNode);
     const edges = fileToEdges(fileName);
     edges.forEach(edge => {
-      const endNode = ensureNode(edge.end);
+      const endNode = ensureNode(edge.end, fileName);
       // Here we are discarding duplicate edges
       if (!startNode.edges.has(endNode)) {
         startNode.edges.set(endNode, edge);
@@ -107,8 +110,19 @@ function findCycles(graph: Iterable<Node>): Array<Array<Node>> {
   return result;
 }
 
-const rootFiles = process.argv.slice(2);
+function printGraph(graph: Map<string, Node>): void {
+  process.stdout.write(`Found ${graph.size} files\n`);
+  for (const node of graph.values()) {
+    process.stdout.write(`File: ${node.file}, Edges ${node.edges.size}\n`);
+  }
+}
+
+const verbose = process.argv[2] === '--verbose';
+const rootFiles = process.argv.slice(2 + (verbose ? 1 : 0));
 const graph = buildGraph(rootFiles);
+if (verbose) {
+  printGraph(graph);
+}
 const cycles = findCycles(graph.values()).
     filter(cycle => cycle.length > 1).
     map(cycle => cycle.map(node => node.file));
