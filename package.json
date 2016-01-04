@@ -1,0 +1,40 @@
+{
+  "name": "sabor",
+  "version": "0.1.0",
+  "description": "Detects architecture cycles in JS directories.",
+  "license": "MIT",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/peterhal/sabor"
+  },
+  "scripts": {
+    "build": "babel src -d lib",
+    "lint": "eslint",
+    "lint-all": "eslint ."
+  },
+  "dependencies": {
+    "babel-polyfill": "6.3.14",
+    "es6-promise": "3.0.2",
+    "babel-plugin-syntax-flow": "6.3.13",
+    "babel-plugin-transform-flow-strip-types": "6.3.13",
+    "babel-preset-es2015": "6.3.13",
+    "babel-preset-stage-0": "6.3.13",
+    "babel-register": "6.3.13",
+    "babel-types": "6.3.13",
+    "babylon": "6.3.26",
+    "resolve": "1.1.6"
+  },
+  "devDependencies": {
+    "babel": "6.3.13",
+    "babel-cli": "6.3.13",
+    "babel-eslint": "4.1.6",
+    "eslint": "1.10.3",
+    "eslint-plugin-babel": "3.0.0",
+    "eslint-plugin-jasmine": "1.6.0"
+  },
+  "babel": {
+    "presets": ["es2015", "stage-0"],
+    "plugins": ["syntax-flow", "transform-flow-strip-types"]
+  }
+}

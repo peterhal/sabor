@@ -1,0 +1,19 @@
+[include]
+
+[ignore]
+# second-level dependencies
+# .*/node_modules/[^/]+/node_modules/.*
+.*/node_modules/*
+
+[libs]
+
+[options]
+esproposal.class_static_fields=enable
+esproposal.decorators=ignore
+suppress_comment=.*\\$FlowFixMe.*
+suppress_comment=.*\\$FlowIssue.*
+suppress_comment=.*\\$FlowIgnore.*
+unsafe.enable_getters_and_setters=true
+
+[version]
+0.20.1
