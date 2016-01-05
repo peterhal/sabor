@@ -1,9 +1,12 @@
 {
   "name": "sabor",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Detects architecture cycles in JS directories.",
   "license": "MIT",
   "main": "index.js",
+  "bin": {
+    "sabor": "./bin/sabor.js"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/peterhal/sabor.git"
