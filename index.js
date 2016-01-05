@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 require('babel-register');
 require('babel-polyfill');
 require('es6-promise').polyfill();
@@ -6,4 +8,4 @@ require('es6-promise').polyfill();
 // Traverses all relative imports and require statements.
 // Detects and reports any cycles between JS files.
 // Exit code 1 if any cycles were detected.
-require('./src/main');
+require('./lib/main');

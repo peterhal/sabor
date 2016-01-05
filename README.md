@@ -20,3 +20,12 @@ Yields:
 ```
 No cycles found in 4 files.
 ```
+
+Development
+-----------
+
+To Build:
+
+```
+npm run build
+```
