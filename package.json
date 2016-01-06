@@ -1,6 +1,6 @@
 {
   "name": "sabor",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Detects architecture cycles in JS directories.",
   "license": "MIT",
   "bin": {
@@ -19,7 +19,6 @@
   "dependencies": {
     "babel-polyfill": "6.3.14",
     "es6-promise": "3.0.2",
-    "babel-register": "6.3.13",
     "babel-types": "6.3.13",
     "babylon": "6.3.26",
     "resolve": "1.1.6"

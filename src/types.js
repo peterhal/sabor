@@ -1,4 +1,3 @@
-'use babel';
 /* @flow */
 
 export type Location = {

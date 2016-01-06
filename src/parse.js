@@ -1,4 +1,3 @@
-'use babel';
 /* @flow */
 
 import * as babylon from 'babylon';
