@@ -88,14 +88,25 @@ function importToEdge(fileName: string, imp: Object): Edge {
   };
 }
 
+// Returns the empty string if unable to resolve module.
+function resolveEdge(edge: Edge): string {
+  try {
+    return resolve.sync(edge.end, {basedir: path.dirname(edge.start)});
+  } catch (e) {
+    process.stderr.write(`Error: resolving '${edge.end}' from '${edge.start}'\n`);
+    return '';
+  }
+}
+
 function relativizeEdges(edges: Array<Edge>): Array<Edge> {
   return edges.
     filter(edge => isRelativeModule(edge.end)).
     map(edge => ({
       start: edge.start,
-      end: resolve.sync(edge.end, {basedir: path.dirname(edge.start)}),
+      end: resolveEdge(edge),
       location: edge.location,
-    }));
+    })).
+    filter(edge => edge.end !== '');
 }
 
 // Takes a fully qualified file name, finds all imports and requires
