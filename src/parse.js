@@ -43,7 +43,9 @@ export function parseFile(fileName: string): Object {
   try {
     return parse(fs.readFileSync(fileName, 'utf8'));
   } catch (e) {
-    process.stderr.write(`Error parsing ${fileName}\n`);
+    const message = `Error parsing ${fileName}: ${e.message}\n`;
+    process.stderr.write(message);
+    e.message = message;
     throw e;
   }
 }
