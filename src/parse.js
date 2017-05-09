@@ -7,31 +7,20 @@ const parserConfig = {
   // parse in strict mode and allow module declarations
   sourceType: 'module',
 
+  parserOpts: {
+    plugins: [
+      'classProperties',
+      'flow',
+      'jsx',
+      'objectRestSpread',
+    ],
+  },
+
   plugins: [
-    // enable experimental async functions
-    'asyncFunctions',
-
-    // stage 3
-    'asyncGenerators',
-    'exponentiationOperator',
-
-    // stage 2
-    'trailingFunctionCommas',
-    'objectRestSpread',
-
-    // stage 1
-    'classConstructorCall',
     'classProperties',
-    'exportExtensions',
-    'decorators',
-
-    // stage 0
-    'doExpressions',
-    'functionBind',
-
-    // enable jsx and flow syntax
-    'jsx',
     'flow',
+    'jsx',
+    'objectRestSpread',
   ],
 };
 

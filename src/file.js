@@ -7,6 +7,11 @@ import resolve from 'resolve';
 
 import type {Edge} from './types';
 
+// TODO: Remove this when upgrading to babel 7
+// Patch VISITOR_KEYS because it lags behind the parser ...
+VISITOR_KEYS['ObjectTypeSpreadProperty'] = ["argument"];
+
+
 function* childrenOf(node: ?Object): Iterator<Object> {
   if (node != null) {
     for (const key of VISITOR_KEYS[node.type]) {
