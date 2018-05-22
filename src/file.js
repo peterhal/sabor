@@ -55,7 +55,8 @@ function findImports(node: ?Object): Array<Object> {
   const result = [];
   traverse(node, child => {
     if (child.type === 'ImportDeclaration' &&
-        child.importKind !== 'type') {
+        child.importKind !== 'type' &&
+        child.importKind !== 'typeof') {
       result.push(child);
     }
     return true;
