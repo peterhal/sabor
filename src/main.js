@@ -120,9 +120,9 @@ function printGraph(graph: Map<string, Node>): void {
 
 const args = yargs
   .option('verbose', {
-	   type: 'boolean',
-     default: false,
-     description: 'Show verbose output while parsing'
+    type: 'boolean',
+    default: false,
+    description: 'Show verbose output while parsing',
   }).option('types', {
     type: 'boolean',
     default: false,
