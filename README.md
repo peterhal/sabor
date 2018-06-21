@@ -29,3 +29,9 @@ To Build:
 ```
 npm run build
 ```
+
+Run lint before submitting a PR:
+
+```
+npm run-script lint
+```
