@@ -51,12 +51,13 @@ function findRequires(node: ?Object): Array<Object> {
   return result;
 }
 
-function findImports(node: ?Object): Array<Object> {
+function findImports(node: ?Object, includeTypes: boolean): Array<Object> {
   const result = [];
   traverse(node, child => {
     if (child.type === 'ImportDeclaration' &&
-        child.importKind !== 'type' &&
-        child.importKind !== 'typeof') {
+        (includeTypes || (
+          child.importKind !== 'type' &&
+          child.importKind !== 'typeof'))) {
       result.push(child);
     }
     return true;
@@ -117,12 +118,12 @@ function relativizeEdges(edges: Array<Edge>): Array<Edge> {
 
 // Takes a fully qualified file name, finds all imports and requires
 // which are relative paths and converts them to Edges.
-export default function fileToEdges(fileName: string): Array<Edge> {
+export default function fileToEdges(fileName: string, includeTypes: boolean): Array<Edge> {
   const tree = parseFile(fileName);
   const allRequires =
       findRequires(tree).map(require => requireToEdge(fileName, require));
   Array.prototype.push.apply(
     allRequires,
-    findImports(tree).map(imp => importToEdge(fileName, imp)));
+    findImports(tree, includeTypes).map(imp => importToEdge(fileName, imp)));
   return relativizeEdges(allRequires);
 }

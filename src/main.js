@@ -2,8 +2,10 @@
 
 import invariant from 'assert';
 import fileToEdges from './file';
+import yargs from 'yargs';
 
 import type {Edge} from './types';
+
 
 type Node = {
   file: string;
@@ -17,7 +19,7 @@ function buildGraph(rootFiles: Array<string>): Map<string, Node> {
 
   function ensureNode(file: string, from: ?string): Node {
     if (!nodes.has(file)) {
-      if (verbose && from != null) {
+      if (args.verbose && from != null) {
         process.stdout.write(`Adding file ${file} referenced from ${from}\n`);
       }
       const result = {
@@ -40,7 +42,7 @@ function buildGraph(rootFiles: Array<string>): Map<string, Node> {
     const fileName = toProcess.pop();
     const startNode = nodes.get(fileName);
     invariant(startNode);
-    const edges = fileToEdges(fileName);
+    const edges = fileToEdges(fileName, args.types);
     edges.forEach(edge => {
       const endNode = ensureNode(edge.end, fileName);
       // Here we are discarding duplicate edges
@@ -116,10 +118,20 @@ function printGraph(graph: Map<string, Node>): void {
   }
 }
 
-const verbose = process.argv[2] === '--verbose';
-const rootFiles = process.argv.slice(2 + (verbose ? 1 : 0));
+const args = yargs
+  .option('verbose', {
+	   type: 'boolean',
+     default: false,
+     description: 'Show verbose output while parsing'
+  }).option('types', {
+    type: 'boolean',
+    default: false,
+    description: 'Check for cycles caused by type imports as well as normal requires and imports',
+  }).argv;
+
+const rootFiles = args._;
 const graph = buildGraph(rootFiles);
-if (verbose) {
+if (args.verbose) {
   printGraph(graph);
 }
 const cycles = findCycles(graph.values()).
