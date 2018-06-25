@@ -217,7 +217,7 @@ if (args.verbose) {
 }
 const cycles = findSmallestCycles(findCycles(graph.values())).
     filter(cycle => cycle.length > 1).
-    map(cycle => cycle.map(node => node.file));
+    map(cycle => cycle.map(node => node.file).sort((a, b) => a.localeCompare(b)));
 if (cycles.length > 0) {
   process.stderr.write('Found cycles:\n');
   process.stderr.write(JSON.stringify(cycles, null, 4));
