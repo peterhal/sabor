@@ -111,6 +111,87 @@ function findCycles(graph: Iterable<Node>): Array<Array<Node>> {
   return result;
 }
 
+function findSmallestCycles(components: Array<Array<Node>>): Array<Array<Node>> {
+  // Find the/a shortest cycle (of which one is guaranteed) in the given
+  // set of nodes, which includes the given starting node
+  function breadthFirstSearch(node: Node, candidateNodes: Set<Node>): Array<Node> {
+    const from: Map<Node, Node> = new Map();
+    const toProcess: Array<Node> = [];
+
+    function queueConnectedNodes(start: Node): void {
+      start.edges.forEach((edge, end) => {
+        if (!from.has(end) && candidateNodes.has(end)) {
+          from.set(end, start);
+          toProcess.push(end);
+        }
+      });
+    }
+
+    function reconstuctPathFrom(startNode: Node): Array<Node> {
+      let pathNode: Node = startNode;
+
+      const path: Array<Node> = [];
+      do {
+        path.push(pathNode);
+        pathNode = from.get(pathNode);
+      } while (pathNode !== startNode);
+
+      return path;
+    }
+
+    queueConnectedNodes(node);
+
+    while (toProcess.length !== 0) {
+      const candidate = toProcess.shift();
+      queueConnectedNodes(candidate);
+    }
+
+    invariant(from.has(node));
+    return reconstuctPathFrom(node);
+  }
+
+  const cycles: Array<Array<Node>> = [];
+
+  // For each strongly connected component, find the shortest cycle containing
+  // each node in the component.
+  components
+    .filter(component => component.length > 1)
+    .forEach(component => {
+      const nodesInComponent: Set<Node> = new Set(component);
+      Array.prototype.push.apply(
+        cycles, component.map(node => breadthFirstSearch(node, nodesInComponent)));
+    });
+
+  cycles.sort((a, b) => a.length - b.length);
+
+  // Filter out duplicate cycles (i.e. cycles that contain nodes that have
+  // already been seen in another cycle.) Since we consider these in sorted
+  // order, we'll end up with the shortest cycle that contains each node
+  // in the output.
+  const seenNodes: Set<Node> = new Set();
+
+  function hasUnseenNodes(cycle: Array<Node>): boolean {
+    return cycle.reduce((accum, node) => accum || !seenNodes.has(node), false);
+  }
+
+  function markNodesSeen(cycle: Array<Node>): void {
+    cycle.forEach(node => {
+      seenNodes.add(node);
+    });
+  }
+
+  const minimalCycles: Array<Array<Node>> = [];
+
+  cycles.forEach(cycle => {
+    if (hasUnseenNodes(cycle)) {
+      minimalCycles.push(cycle);
+      markNodesSeen(cycle);
+    }
+  });
+
+  return minimalCycles;
+}
+
 function printGraph(graph: Map<string, Node>): void {
   process.stdout.write(`Found ${graph.size} files\n`);
   for (const node of graph.values()) {
@@ -134,7 +215,7 @@ const graph = buildGraph(rootFiles);
 if (args.verbose) {
   printGraph(graph);
 }
-const cycles = findCycles(graph.values()).
+const cycles = findSmallestCycles(findCycles(graph.values())).
     filter(cycle => cycle.length > 1).
     map(cycle => cycle.map(node => node.file));
 if (cycles.length > 0) {

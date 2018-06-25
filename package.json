@@ -12,7 +12,7 @@
   },
   "scripts": {
     "prepublish": "babel src -d lib",
-    "build": "babel src -d lib",
+    "build": "babel src -d lib --source-maps inline",
     "lint": "eslint src",
     "lint-all": "eslint ."
   },
